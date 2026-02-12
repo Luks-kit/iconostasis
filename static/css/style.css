@@ -88,6 +88,7 @@
     .icon-card {
         background-color: white;
         width: 180px;
+        height: 600px;
         text-align: center;
         border-radius: 8px;
         box-shadow: 0 2px 6px rgba(0,0,0,0.1);
