@@ -1,1 +1,6 @@
-fastapi; uvicorn; sqlalchemy; pymysql; jinja2; python-multipart;
+fastapi 
+uvicorn 
+sqlalchemy
+pymysql
+jinja2
+python-multipart
