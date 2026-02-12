@@ -87,7 +87,7 @@
 
    .icon-card {
         background-color: white;
-        height: 320px; /* Increased slightly to fit text better */
+        height: 300px;
         width: 180px;  /* Fixed width is often safer than aspect-ratio for grid flow */
         text-align: center;
         border-radius: 8px;
@@ -124,7 +124,7 @@
         } 
 
     .icon-img {
-        max-width: 100%;   /* ensures image never exceeds container width */
+        max-width: 50%;   /* ensures image never exceeds container width */
         max-height: 500px; /* scale down very tall images */
         height: auto;       /* maintain aspect ratio */
         border: 1px solid #ccc;
