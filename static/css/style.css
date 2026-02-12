@@ -85,28 +85,43 @@
         gap: 20px;
     }
 
-    .icon-card {
+   .icon-card {
         background-color: white;
-        height: 270px;
-        aspect-ratio: 5 / 9;
+        height: 320px; /* Increased slightly to fit text better */
+        width: 180px;  /* Fixed width is often safer than aspect-ratio for grid flow */
         text-align: center;
         border-radius: 8px;
         box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         transition: transform 0.2s, box-shadow 0.2s;
         overflow: hidden;
+    
+        /* The Magic Sauce */
+        display: flex;
+        flex-direction: column;
     }
 
     .icon-card img {
         width: 100%;
-        height: auto;
+        height: 240px;    /* Give the image a specific portion of the card */
+        object-fit: cover; /* This prevents stretching/squashing */
         display: block;
     }
-
-    .icon-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        cursor: pointer;
-    } 
+    
+    .icon-card p, .icon-card h3 {
+        margin: 0;
+        padding: 10px;
+        flex-grow: 1;      /* This pushes the text to fill the remaining space */
+        display: flex;
+        align-items: center; /* Vertically centers the title */
+        justify-content: center;
+        font-size: 0.9rem;
+        line-height: 1.2;
+    }
+        .icon-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            cursor: pointer;
+        } 
 
     .icon-img {
         max-width: 100%;   /* ensures image never exceeds container width */
