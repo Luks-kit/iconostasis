@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ icon.title }} - Iconostasis</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin:0; padding:0; }
+        .navbar { padding:10px; background-color:#f0f0f0; }
+        .navbar a { margin-right:20px; text-decoration:none; color:#333; font-weight:bold; }
+        .container { display:flex; }
+        .sidebar { width:250px; padding:20px; background-color:#fafafa; border-right:1px solid #ddd; box-sizing:border-box; }
+        .main { flex:1; padding:20px; }
+        .icon-img { max-width:100%; max-height: 500px; height:auto; border:1px solid #ccc; display: block; margin-bottom: 20px; }
+        .icon-img:hover { transform: scale(1.2); transition: transform 0.2s ease-in-out; cursor: zoom in; }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <a href="/">Home</a>
+    <a href="/upload">Upload New Icon</a>
+</div>
+
+<div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h3>Icon Details</h3>
+        <p><strong>Title:</strong> {{ icon.title }}</p>
+        <p><strong>Saint(s):</strong> 
+            {% for saint in icon.saints %}
+                {{ saint.name }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
+        </p>
+        <p><strong>Tradition:</strong> {{ icon.tradition.name }}</p>
+        <p><strong>Century:</strong> {{ icon.century }}</p>
+        <p><strong>Region:</strong> {{ icon.region }}</p>
+        <p><strong>Iconographer:</strong> {{ icon.iconographer or "Unknown" }}</p>
+    </div>
+
+    <!-- Main content -->
+    <div class="main">
+        <img class="icon-img" src="{{ icon.image_url }}" alt="{{ icon.title }}">
+        <h2>Description</h2>
+        <p>{{ icon.description }}</p>
+    </div>
+</div>
+
+</body>
+</html>
+

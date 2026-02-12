@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Icon - Iconostasis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navigation bar */
+        .navbar {
+            padding: 10px;
+            background-color: #f0f0f0;
+        }
+        .navbar a {
+            margin-right: 20px;
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+
+        /* Page layout */
+        .container {
+            display: flex;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            padding: 20px;
+            background-color: #fafafa;
+            border-right: 1px solid #ddd;
+            box-sizing: border-box;
+        }
+
+        /* Main content */
+        .main {
+            flex: 1;
+            padding: 20px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<div class="navbar">
+    <a href="/">Home</a>
+    <a href="/upload">Upload New Icon</a>
+</div>
+
+<div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h3>Upload Instructions</h3>
+        <p>Fill out all fields. Enter existing saints or new ones (comma separated).</p>
+        <p>Images will be saved locally in <code>/static/images/</code>.</p>
+    </div>
+
+    <!-- Main content -->
+    <div class="main">
+        <h1>Upload New Icon</h1>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <label>Title:</label><br>
+            <input type="text" name="title" required><br><br>
+
+            <label>Century:</label><br>
+            <input type="text" name="century"><br><br>
+
+            <label>Region:</label><br>
+            <input type="text" name="region"><br><br>
+
+            <label>Iconographer:</label><br>
+            <input type="text" name="iconographer"><br><br>
+
+            <label>Description:</label><br>
+            <textarea name="description" rows="4"></textarea><br><br>
+
+            <label>Tradition:</label><br>
+            <select name="tradition_id" required>
+                {% for tradition in traditions %}
+                    <option value="{{ tradition.id }}">{{ tradition.name }}</option>
+                {% endfor %}
+            </select><br><br>
+
+            <label>Saint(s) (comma separated):</label><br>
+            <input type="text" name="saints"><br><br>
+
+            <label>Image:</label><br>
+            <input type="file" name="image_file" accept="image/*" required><br><br>
+
+            <input type="submit" value="Upload Icon">
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
+

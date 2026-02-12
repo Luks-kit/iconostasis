@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Icon Uploaded - Iconostasis</title>
+</head>
+<body>
+
+    <div style="padding: 10px; background-color: #f0f0f0; margin-bottom: 20px;">
+        <a href="/" style="margin-right: 20px;">Home</a>
+        <a href="/upload">Upload New Icon</a>
+    </div>
+
+
+    <h1>Icon Uploaded Successfully!</h1>
+    <p>Title: {{ icon.title }}</p>
+    <p><a href="/icon/{{ icon.id }}">View Icon</a></p>
+    <p><a href="/upload">Upload Another</a></p>
+    <p><a href="/">Back to Home</a></p>
+</body>
+</html>
+

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Iconostasis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navigation bar */
+        .navbar {
+            padding: 10px;
+            background-color: #f0f0f0;
+        }
+        .navbar a {
+            margin-right: 20px;
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+
+        /* Page layout */
+        .container {
+            display: flex;
+        }
+
+        /* Left sidebar */
+        .sidebar {
+            width: 250px;
+            padding: 20px;
+            background-color: #fafafa;
+            border-right: 1px solid #ddd;
+            box-sizing: border-box;
+        }
+
+        /* Main content */
+        .main {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        /* Icon cards */
+        .icon-card {
+            width: 200px;
+            text-align: center;
+        }
+        .icon-card img {
+            width: 150px;
+            height: auto;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<div class="navbar">
+    <a href="/">Home</a>
+    <a href="/upload">Upload New Icon</a>
+</div>
+
+<div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h3>Filters</h3>
+        <form method="get" action="/">
+            <label>Saint:</label><br>
+            <input type="text" name="saint" placeholder="e.g. St. George" value="{{ saint|default('') }}"><br><br>
+
+            <label>Tradition:</label><br>
+            <select name="tradition_id">
+                <option value="0">All</option>
+                {% for tradition in traditions %}
+                    <option value="{{ tradition.id }}" {% if tradition.id|string == selected_tradition %}selected{% endif %}>
+                        {{ tradition.name }}
+                    </option>
+                {% endfor %}
+            </select><br><br>
+
+            <label>Century:</label><br>
+            <input type="text" name="century" placeholder="e.g. 12th Century" value="{{ century|default('') }}"><br><br>
+
+            <label>Region:</label><br>
+            <input type="text" name="region" placeholder="e.g. Byzantium" value="{{ region|default('') }}"><br><br>
+
+            <input type="submit" value="Filter">
+        </form>
+    </div>
+
+    <!-- Main content -->
+    <div class="main">
+        {% for icon in icons %}
+            <div class="icon-card">
+                <a href="/icon/{{ icon.id }}">
+                    <img src="{{ icon.image_url }}" alt="{{ icon.title }}">
+                    <p>{{ icon.title }}</p>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+</body>
+</html>
+

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ icon.title }}</title>
+</head>
+<body>
+    <a href="/">← Back</a>
+
+    <h1>{{ icon.title }}</h1>
+    <img src="{{ icon.image_url }}" width="600">
+
+    <p><strong>Century:</strong> {{ icon.century }}</p>
+    <p><strong>Region:</strong> {{ icon.region }}</p>
+    <p><strong>Iconographer:</strong> {{ icon.iconographer }}</p>
+    <p>{{ icon.description }}</p>
+</body>
+</html>
+

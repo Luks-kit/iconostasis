@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Icon Uploaded - Iconostasis</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin:0; padding:0; }
+        .navbar { padding:10px; background-color:#f0f0f0; }
+        .navbar a { margin-right:20px; text-decoration:none; color:#333; font-weight:bold; }
+        .container { display:flex; }
+        .sidebar { width:250px; padding:20px; background-color:#fafafa; border-right:1px solid #ddd; box-sizing:border-box; }
+        .main { flex:1; padding:20px; }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <a href="/">Home</a>
+    <a href="/upload">Upload New Icon</a>
+</div>
+
+<div class="container">
+    <div class="sidebar">
+        <h3>Info</h3>
+        <p>You can upload another icon or return home.</p>
+    </div>
+
+    <div class="main">
+        <h1>Icon Uploaded Successfully!</h1>
+        <p>Title: {{ icon.title }}</p>
+        <p><a href="/icon/{{ icon.id }}">View Icon</a></p>
+        <p><a href="/upload">Upload Another</a></p>
+        <p><a href="/">Back to Home</a></p>
+    </div>
+</div>
+
+</body>
+</html>
+
