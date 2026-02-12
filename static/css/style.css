@@ -1,0 +1,140 @@
+<style>
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f7f7f7;
+        color: #333;
+    }
+
+    a {
+        text-decoration: none;
+        color: #2c3e50;
+    }
+
+    a:hover {
+        color: #2980b9;
+    }
+
+    h1, h2, h3 {
+        color: #2c3e50;
+    }
+
+    input, select, textarea {
+        padding: 8px;
+        margin-top: 4px;
+        margin-bottom: 12px;
+        width: 100%;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    input[type="submit"] {
+        background-color: #2980b9;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.2s ease-in-out;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #3498db;
+    }
+
+        /* Navigation bar */
+    .navbar {
+        padding: 15px 20px;
+        background-color: #34495e;
+        color: white;
+        font-weight: bold;
+    }
+
+    .navbar a {
+        color: white;
+        margin-right: 20px;
+    }
+
+    .navbar a:hover {
+        color: #ecf0f1;
+    }
+        /* Page layout */
+        .container {
+            display: flex;
+        }
+
+        /* Left sidebar */
+    .sidebar {
+        width: 250px;
+        padding: 20px;
+        background-color: #ecf0f1;
+        border-right: 1px solid #ddd;
+        box-sizing: border-box;
+        min-height: 80vh;
+        position: sticky;
+        top: 0;
+    }
+        /* Main content */
+    .main {
+        flex: 1;
+        padding: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .icon-card {
+        background-color: white;
+        width: 180px;
+        text-align: center;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        transition: transform 0.2s, box-shadow 0.2s;
+        overflow: hidden;
+    }
+
+    .icon-card img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    .icon-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        cursor: pointer;
+    } 
+
+    .icon-img {
+        max-width: 100%;   /* ensures image never exceeds container width */
+        max-height: 500px; /* scale down very tall images */
+        height: auto;       /* maintain aspect ratio */
+        border: 1px solid #ccc;
+        display: block;
+        margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            flex-direction: column;
+        }
+
+        .sidebar {
+            width: 100%;
+            border-right: none;
+            border-bottom: 1px solid #ddd;
+            min-height: auto;
+            position: relative;
+            top: auto;
+        }
+
+        .main {
+            justify-content: center;
+        }
+
+    }
+
+
+    </style>
