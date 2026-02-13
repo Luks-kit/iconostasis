@@ -7,3 +7,4 @@ python-multipart
 psycopg2-binary
 flask-sqlalchemy
 cloudinary
+python-dotenv
