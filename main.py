@@ -1,6 +1,7 @@
 import os
 import cloudinary
 import cloudinary.uploader
+from passlib.hash import bcyrpt
 from fastapi import FastAPI, Request, Query, Form, UploadFile, File
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
@@ -47,9 +48,6 @@ def get_db():
         yield db
     finally:
         db.close()
-
-
-
 
 # Home page
 @app.get("/", response_class=HTMLResponse)
@@ -152,5 +150,36 @@ def upload_icon(
 
     return templates.TemplateResponse("upload_success.html", {"request": request, "icon": icon})
 
+@app.get("/login", response_class=HTMLResponse)
+def log_in_form(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request })
 
+@app.post("/login", response_class=HTMLResponse)
+def log_in( 
+    request: Request
+    username: str = Form(...), 
+    password: str = Form(...)
+):
+    db = SessionLocal()
+    
+    # 1. Look for the user in the database
+    user = db.query(User).filter(User.username == username).first()
+    
+    # 2. Check if user exists AND if the password is correct
+    # pwd_context.verify takes (plain_text_password, hashed_password_from_db)
+    if not user or not pwd_context.verify(password, user.password_hash):
+        # If it fails, send them back to login with an error message
+        return templates.TemplateResponse("login.html", {
+            "request": request, 
+            "error": "Invalid username or password"
+        })
+
+    # 3. If successful, redirect to home or dashboard
+    response = RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
+    
+    # TODO: Set a cookie or JWT token here so the browser "remembers" them
+    # response.set_cookie(key="session_id", value="xyz123") 
+    
+    return response
+    
 
