@@ -8,4 +8,5 @@ psycopg2-binary
 flask-sqlalchemy
 cloudinary
 python-dotenv
-"passlib[bcrypt]"
+passlib
+bcrypt
