@@ -36,6 +36,8 @@ class Icon(Base):
 
     tradition_id = Column(Integer, ForeignKey("traditions.id"))
     tradition = relationship("Tradition")
+    user_id = Column(Integer, ForeignKey("users.id"))
+    creator = relationship("User", back_populates="icons")
 
     saints = relationship("Saint", secondary=icon_saints, back_populates="icons")
     
