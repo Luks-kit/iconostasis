@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 import cloudinary
 import cloudinary.uploader
 from fastapi import FastAPI, Request, Query, Form, UploadFile, File
@@ -15,6 +16,8 @@ templates = Jinja2Templates(directory="templates")
 
 # Serve the 'static' folder at /static
 app.mount("/static", StaticFiles(directory="static"), name="static")
+
+load_dotenv()
 
 # SQLite connection
 # Note: Neon requires SSL, so we ensure the URL ends with ?sslmode=require
@@ -33,6 +36,9 @@ SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
 # 2. Cloudinary Configuration
 cloudinary.config(
+    cloud_name = os.getenv("CLOUD_NAME"),
+    api_key = os.getenv("CLOUD_KEY"),
+    api_secret = os.getenv("CLOUD_SECRET"),
     cloudinary_url = os.getenv("CLOUDINARY_URL")
 )
 
@@ -44,18 +50,6 @@ def get_db():
     finally:
         db.close()
 
-# Add some traditions
-byzantine = Tradition(name="Byzantine")
-russian = Tradition(name="Russian")
-coptic = Tradition(name="Coptic")
-latin = Tradition(name="Latin")
-ethiopian = Tradition(name="Ethiopian")
-greek = Tradition(name="Greek")
-
-tr_add = SessionLocal()
-
-tr_add.add_all([byzantine, russian, coptic, latin, ethiopian, greek])
-tr_add.commit()
 
 
 
@@ -128,9 +122,9 @@ def upload_icon(
     image_file: UploadFile = File(...)
 ):
     db = SessionLocal()
+    image_file.file.seek(0)
 
-
-    upload_result = cloudinary.uploader.upload(image_file.filename)
+    upload_result = cloudinary.uploader.upload(image_file.file)
     optimized_url = upload_result["secure_url"]
 
     # Create new Icon
