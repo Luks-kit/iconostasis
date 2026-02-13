@@ -129,10 +129,6 @@ def upload_icon(
 ):
     db = SessionLocal()
 
-    # Save the uploaded image to static/images/
-    image_path = f"static/images/{image_file.filename}"
-    with open(image_path, "wb") as buffer:
-        shutil.copyfileobj(image_file.file, buffer)
 
     upload_result = cloudinary.uploader.upload(image_file.filename)
     optimized_url = upload_result["secure_url"]
