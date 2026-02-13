@@ -1,7 +1,7 @@
 import os
 import cloudinary
 import cloudinary.uploader
-from passlib.hash import bcyrpt
+import bcrypt
 from fastapi import FastAPI, Request, Query, Form, UploadFile, File
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
