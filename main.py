@@ -44,6 +44,21 @@ def get_db():
     finally:
         db.close()
 
+# Add some traditions
+byzantine = Tradition(name="Byzantine")
+russian = Tradition(name="Russian")
+coptic = Tradition(name="Coptic")
+latin = Tradition(name="Latin")
+ethiopian = Tradition(name="Ethiopian")
+greek = Tradition(name="Greek")
+
+tr_add = SessionLocal()
+
+tr_add.add_all([byzantine, russian, coptic, latin, ethiopian, greek])
+tr_add.commit()
+
+
+
 # Home page
 @app.get("/", response_class=HTMLResponse)
 def home(
