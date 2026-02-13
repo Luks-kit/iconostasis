@@ -1,5 +1,4 @@
 import os
-from dotenv import load_dotenv
 import cloudinary
 import cloudinary.uploader
 from fastapi import FastAPI, Request, Query, Form, UploadFile, File
@@ -17,9 +16,8 @@ templates = Jinja2Templates(directory="templates")
 # Serve the 'static' folder at /static
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-load_dotenv()
 
-# SQLite connection
+# SQLite/PostgreSQL connection
 # Note: Neon requires SSL, so we ensure the URL ends with ?sslmode=require
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///database.db")
 if DATABASE_URL.startswith("postgres://"):
