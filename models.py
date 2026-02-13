@@ -38,4 +38,24 @@ class Icon(Base):
     tradition = relationship("Tradition")
 
     saints = relationship("Saint", secondary=icon_saints, back_populates="icons")
+    
+class User(Base):
+    __tablename__ = "users"
+    id = Column(Integer, primary_key=True)
+    username = Column(String, unique=True, nullable=False)
+    email = Column(String, nullable=False)
+    hashed_pw = Column(String(255), nullable=False)
+    # Relationships
+    icons = relationship("Icon", back_populates="creator")
+    comments = relationship("Comment", back_populates="author")
+
+class Comment(Base):
+    __tablename__ = "comments"
+    id = Column(Integer, primary_key=True)
+    text = Column(Text, nullable=False)
+    # Foreign Keys
+    user_id = Column(Integer, ForeignKey("users.id"))
+    icon_id = Column(Integer, ForeignKey("icons.id"))
+    # Relationships
+    author = relationship("User", back_populates="comments")
 
