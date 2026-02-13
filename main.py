@@ -156,7 +156,7 @@ def log_in_form(request: Request):
 
 @app.post("/login", response_class=HTMLResponse)
 def log_in( 
-    request: Request
+    request: Request,
     username: str = Form(...), 
     password: str = Form(...)
 ):
