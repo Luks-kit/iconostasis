@@ -1,14 +1,14 @@
-from fastapi import FastAPI, Request, Query
+import os
+import cloudinary
+import cloudinary.uploader
+from fastapi import FastAPI, Request, Query, Form, UploadFile, File
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
-from fastapi import Form, UploadFile, File
-import shutil
-import os
-from typing import Optional
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models import Base, Icon, Saint, Tradition
+
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
@@ -17,9 +17,18 @@ templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # SQLite connection
-DATABASE_URL = "sqlite:///database.db"
+# Note: Neon requires SSL, so we ensure the URL ends with ?sslmode=require
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///database.db")
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
+
+# 2. Cloudinary Configuration
+cloudinary.config(
+    cloudinary_url = os.getenv("CLOUDINARY_URL")
+)
 
 # Dependency
 def get_db():
@@ -104,6 +113,9 @@ def upload_icon(
     with open(image_path, "wb") as buffer:
         shutil.copyfileobj(image_file.file, buffer)
 
+    upload_result = cloudinary.uploader.upload(image_file.filename)
+    optimized_url = upload_result["secure_url"]
+
     # Create new Icon
     icon = Icon(
         title=title,
@@ -112,7 +124,7 @@ def upload_icon(
         iconographer=iconographer,
         description=description,
         tradition_id=tradition_id,
-        image_url=f"/static/images/{image_file.filename}"
+        image_url=optimized_url
     )
 
     # Handle saints
