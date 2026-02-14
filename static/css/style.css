@@ -1,4 +1,4 @@
-<style>
+/* top of file */
 
     body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -46,11 +46,45 @@
 
         /* Navigation bar */
     .navbar {
-        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        
+        align-items: center;
+        padding: 15px 25px;
         background-color: #34495e;
         color: white;
-        font-weight: bold;
     }
+
+    .nav-left {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+    
+    .nav-center {
+        display: flex;
+        gap: 20px;
+    }
+    
+    .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .site-title {
+        margin: 0;
+        font-size: 20px;
+        color: white;
+    }
+
+    .username-display {
+        font-size: 14px;
+        background-color: rgba(255,255,255,0.1);
+        padding: 6px 10px;
+        border-radius: 6px;
+    }
+
 
     .navbar a {
         color: white;
@@ -153,4 +187,4 @@
     }
 
 
-    </style>
+ 

@@ -2,15 +2,29 @@
 <html>
 <head>
     <title>{{ icon.title }} - Iconostasis</title>
-    <link rel="stylesheet" type="text/css" href="/static/css/style.css"> 
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css?v=1"> 
 </head>
 <body>
 
 <div class="navbar">
-    <a href="/">Home</a>
-    <a href="/upload">Upload New Icon</a>
-</div>
+    <div class="nav-left">
+        <h2 class="site-title">Iconostasis</h2>
+        <a href="/">Home</a>
+        <a href="/upload">Upload</a>
+    </div>
 
+    <div class="nav-right">
+        {% if user %}
+            <div class="username-display">
+                Logged in as <strong>{{ user.username }}</strong>
+            </div>
+            <a href="/logout">Logout</a>
+        {% else %}
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+        {% endif %}
+    </div>
+</div>
 <div class="container">
     <!-- Sidebar -->
     <div class="sidebar">

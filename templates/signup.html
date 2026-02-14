@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iconostasis - Create Account</title>
+    <link rel="stylesheet" href="static/css/style.css?v=1"> 
+</head>
+<body>
+
+    <main class="login-container">
+        <h1>Join Iconostasis</h1>
+        
+        <form action="/signup" method="POST">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required minlength="8">
+            </div>
+
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
+            </div>
+
+            <button type="submit" class="btn-submit">Create Account</button>
+        </form>
+
+        <p class="auth-footer">
+            Already have an account? <a href="/login">Login here</a>.
+        </p>
+    </main>
+
+    <script>
+        // Simple client-side check to make sure passwords match
+        const form = document.querySelector('form');
+        const password = document.getElementById('password');
+        const confirm = document.getElementById('confirm_password');
+
+        form.addEventListener('submit', (e) => {
+            if (password.value !== confirm.value) {
+                e.preventDefault();
+                alert("Passwords do not match!");
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -2,17 +2,24 @@ import os
 import cloudinary
 import cloudinary.uploader
 import bcrypt
-from fastapi import FastAPI, Request, Query, Form, UploadFile, File
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, Request, Query, Form, UploadFile, File, HTTPException, status
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+from starlette.middleware.sessions import SessionMiddleware
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from models import Base, Icon, Saint, Tradition
+from models import Base, Icon, Saint, Tradition, User
 
 
 app = FastAPI()
+app.add_middleware(
+        SessionMiddleware,
+        secret_key=os.getenv("SECRET_KEY")
+)
+
 templates = Jinja2Templates(directory="templates")
+
 
 # Serve the 'static' folder at /static
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -49,6 +56,15 @@ def get_db():
     finally:
         db.close()
 
+def get_current_user(request: Request):
+    user_id = request.session.get("user_id")
+    if not user_id:
+        return None
+
+    db = SessionLocal()
+    return db.query(User).filter(User.id == int(user_id)).first()
+
+
 # Home page
 @app.get("/", response_class=HTMLResponse)
 def home(
@@ -60,6 +76,7 @@ def home(
 ):
     db = SessionLocal()
     query = db.query(Icon)
+    user = get_current_user(request)
 
     # Filter by tradition
     if tradition_id > 0:
@@ -82,6 +99,7 @@ def home(
     
     return templates.TemplateResponse("index.html", {
         "request": request,
+        "user": user,
         "icons": icons,
         "traditions": traditions,
         "selected_tradition": str(tradition_id),
@@ -97,13 +115,13 @@ def icon_detail(request: Request, icon_id: int):
     icon = db.query(Icon).filter(Icon.id == icon_id).first()
     if not icon:
         return HTMLResponse(content="Icon not found", status_code=404)
-    return templates.TemplateResponse("icon.html", {"request": request, "icon": icon})
+    return templates.TemplateResponse("icon.html", {"request": request, "icon": icon, "user": get_current_user(request)})
 
 @app.get("/upload", response_class=HTMLResponse)
 def upload_form(request: Request):
     db = SessionLocal()
     traditions = db.query(Tradition).all()
-    return templates.TemplateResponse("upload.html", {"request": request, "traditions": traditions})
+    return templates.TemplateResponse("upload.html", {"request": request, "traditions": traditions, "user": get_current_user(request)})
 
 @app.post("/upload", response_class=HTMLResponse)
 def upload_icon(
@@ -119,6 +137,10 @@ def upload_icon(
 ):
     db = SessionLocal()
     image_file.file.seek(0)
+    
+    user = get_current_user(request)
+    if not user:
+        return RedirectResponse(url="/login", status_code=303)
 
     upload_result = cloudinary.uploader.upload(image_file.file)
     optimized_url = upload_result["secure_url"]
@@ -131,7 +153,8 @@ def upload_icon(
         iconographer=iconographer,
         description=description,
         tradition_id=tradition_id,
-        image_url=optimized_url
+        image_url=optimized_url,
+        user_id=user.id
     )
 
     # Handle saints
@@ -148,7 +171,7 @@ def upload_icon(
     db.add(icon)
     db.commit()
 
-    return templates.TemplateResponse("upload_success.html", {"request": request, "icon": icon})
+    return templates.TemplateResponse("upload_success.html", {"request": request, "icon": icon, "user": user})
 
 @app.get("/login", response_class=HTMLResponse)
 def log_in_form(request: Request):
@@ -162,24 +185,69 @@ def log_in(
 ):
     db = SessionLocal()
     
-    # 1. Look for the user in the database
+    # 1. Look for the user
     user = db.query(User).filter(User.username == username).first()
     
-    # 2. Check if user exists AND if the password is correct
-    # pwd_context.verify takes (plain_text_password, hashed_password_from_db)
-    if not user or not pwd_context.verify(password, user.password_hash):
-        # If it fails, send them back to login with an error message
-        return templates.TemplateResponse("login.html", {
-            "request": request, 
-            "error": "Invalid username or password"
-        })
+    # 2. Verify password using bcrypt directly
+    if not user:
+        return templates.TemplateResponse(name="login.html", context={
+            "request": request,
+            "error": "No user with that username found"
+        }, status_code=401)
+    # bcrypt needs bytes, so we encode the strings
+    is_valid: bool = bcrypt.checkpw(
+        password.encode('utf-8'), 
+        user.hashed_pw.encode('utf-8')
+    )
 
-    # 3. If successful, redirect to home or dashboard
-    response = RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
+    if not is_valid:
+        return templates.TemplateResponse(name="login.html", context={
+            "request": request, 
+            "error": "Invalid password"
+        }, status_code=401)
+
+    # 3. Success
+    request.session["user_id"] = user.id
+    return RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
+
+@app.get("/signup", response_class=HTMLResponse)
+def signup_form(request: Request):
+    return templates.TemplateResponse("signup.html", {"request": request})
+
+
+@app.post("/signup")
+def signup_user(
+    username: str = Form(...),
+    email: str = Form(...),
+    password: str = Form(...)
+):
+    db = SessionLocal()
+   
+    if db.query(User).filter(User.username == username).first():
+        return RedirectResponse(url="/signup", staus_code=409)
+
+
+    # 1. Hash the password
+    # gensalt() generates a random salt and handles the complexity for you
+    password_bytes = password.encode('utf-8')
+    salt = bcrypt.gensalt()
+    hashed_password = bcrypt.hashpw(password_bytes, salt)
+
+    # 2. Create the User object
+    # We .decode('utf-8') the hash to store it as a string in Postgres
+    new_user = User(
+        username=username,
+        email=email,
+        hashed_pw=hashed_password.decode('utf-8')
+    )
     
-    # TODO: Set a cookie or JWT token here so the browser "remembers" them
-    # response.set_cookie(key="session_id", value="xyz123") 
-    
-    return response
-    
+
+    db.add(new_user)
+    db.commit()
+    return RedirectResponse(url="/login", status_code=302)
+
+@app.get("/logout")
+async def logout(request: Request):
+    request.session.clear()
+    return RedirectResponse("/", status_code=303)
 
