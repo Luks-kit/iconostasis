@@ -127,6 +127,25 @@
         gap: 20px;
     }
 
+    .profile-container {
+        flex: 1;
+        padding: 20px;
+    }
+
+    .login-container {
+        display: flex;
+        align-items: center;
+        height: 100vh;
+        flex-direction: column;
+    }
+
+    .login-form {
+        text-align: center;
+        padding: 20px;
+        border: 1px solid #ccc;
+        width: 300px;
+    }
+
    .icon-card {
         background-color: white;
         height: 300px;
