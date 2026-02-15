@@ -106,7 +106,9 @@ def icon_detail(request: Request, icon_id: int, db: Session = Depends(get_db)):
     icon = db.query(Icon).filter(Icon.id == icon_id).first()
     if not icon:
         return HTMLResponse(content="Icon not found", status_code=404)
-    return templates.TemplateResponse("icon.html", {"request": request, "icon": icon, "user": get_current_user(request, db)})
+    
+    uploader_name = db.query(Users).filter(User.id == icon.user_id).first().display_name
+    return templates.TemplateResponse("icon.html", {"request": request, "icon": icon, "user": get_current_user(request, db), "uploader_name": uploader_name})
 
 
 @app.get("/upload", response_class=HTMLResponse)
