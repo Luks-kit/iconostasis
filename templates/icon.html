@@ -16,7 +16,7 @@
     <div class="nav-right">
         {% if user %}
             <div class="username-display">
-                Logged in as <strong>{{ user.username }}</strong>
+                Logged in as <strong>{{ user.display_name }}</strong>
             </div>
             <a href="/logout">Logout</a>
         {% else %}
@@ -39,6 +39,7 @@
         <p><strong>Century:</strong> {{ icon.century }}</p>
         <p><strong>Region:</strong> {{ icon.region }}</p>
         <p><strong>Iconographer:</strong> {{ icon.iconographer or "Unknown" }}</p>
+        <p><strong>Uploaded by:</strong> {{uploader_name}}</p>
     </div>
 
     <!-- Main content -->
