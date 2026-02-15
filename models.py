@@ -45,6 +45,7 @@ class User(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True)
     username = Column(String, unique=True, nullable=False)
+    display_name = Column(String, nullable=False)
     email = Column(String, nullable=False)
     hashed_pw = Column(String(255), nullable=False)
     # Relationships
