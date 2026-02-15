@@ -32,14 +32,14 @@
         <p><strong>Title:</strong> {{ icon.title }}</p>
         <p><strong>Saint(s):</strong> 
             {% for saint in icon.saints %}
-                {{ saint.name }}{% if not loop.last %}, {% endif %}
+                <a href="/?saint={{saint.name}}">{{ saint.name }}{% if not loop.last %}, {% endif %}</a>
             {% endfor %}
         </p>
-        <p><strong>Tradition:</strong> {{ icon.tradition.name }}</p>
-        <p><strong>Century:</strong> {{ icon.century }}</p>
-        <p><strong>Region:</strong> {{ icon.region }}</p>
+        <p><strong>Tradition:</strong> <a href="/?tradition_id={{ icon.tradition.id }}">{{ icon.tradition.name }}</p></a>
+        <p><strong>Century:</strong> <a href="/?century={{ icon.century }}"> {{ icon.century }}</p></a>
+        <p><strong>Region:</strong> <a href="/?region={{ icon.region }}"> {{ icon.region }}</p></a>
         <p><strong>Iconographer:</strong> {{ icon.iconographer or "Unknown" }}</p>
-        <p><strong>Uploaded by:</strong> {{uploader_name}}</p>
+        <p><strong>Uploaded by:</strong> <a href="/user/{{ icon.user.username }}">{{uploader_name}}</p></a>
     </div>
 
     <!-- Main content -->
