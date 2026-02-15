@@ -107,7 +107,7 @@ def icon_detail(request: Request, icon_id: int, db: Session = Depends(get_db)):
     if not icon:
         return HTMLResponse(content="Icon not found", status_code=404)
     
-    uploader_name = db.query(Users).filter(User.id == icon.user_id).first().display_name
+    uploader_name = db.query(User).filter(User.id == icon.user_id).first().display_name
     return templates.TemplateResponse("icon.html", {"request": request, "icon": icon, "user": get_current_user(request, db), "uploader_name": uploader_name})
 
 
