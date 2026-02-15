@@ -207,6 +207,7 @@ def signup_form(request: Request):
 
 @app.post("/signup")
 def signup_user(
+    request: Request,
     db: Session =  Depends(get_db),
     username: str = Form(...),
     email: str = Form(...),
@@ -214,7 +215,10 @@ def signup_user(
 ):
    
     if db.query(User).filter(User.username == username).first():
-        return RedirectResponse(url="/signup", staus_code=409)
+        return templates.TemplateResponse("signup.html", {
+            "request": request, 
+            "error": "Username already taken"
+        }, status_code=409)
 
 
     # 1. Hash the password
