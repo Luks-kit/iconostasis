@@ -39,7 +39,7 @@
         <p><strong>Century:</strong> <a href="/?century={{ icon.century }}"> {{ icon.century }}</p></a>
         <p><strong>Region:</strong> <a href="/?region={{ icon.region }}"> {{ icon.region }}</p></a>
         <p><strong>Iconographer:</strong> {{ icon.iconographer or "Unknown" }}</p>
-        <p><strong>Uploaded by:</strong> <a href="/user/{{ icon.user.username }}">{{uploader_name}}</p></a>
+        <p><strong>Uploaded by:</strong> <a href="/user/{{ icon.creator.username }}">{{uploader_name}}</p></a>
     </div>
 
     <!-- Main content -->
