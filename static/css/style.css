@@ -119,6 +119,14 @@
         gap: 20px;
     }
 
+    .icon-grid{
+        flex: 1;
+        padding: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
    .icon-card {
         background-color: white;
         height: 300px;
