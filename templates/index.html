@@ -20,7 +20,7 @@
     <div class="nav-right">
         {% if user %}
             <div class="username-display">
-                Logged in as <strong>{{ user.display_name }}</strong>
+                Logged in as <a href="/user/{{ user.username }}"><strong>{{ user.display_name }}</strong></a>
             </div>
             <a href="/logout">Logout</a>
         {% else %}
