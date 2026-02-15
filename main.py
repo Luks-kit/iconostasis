@@ -258,7 +258,6 @@ async def logout(request: Request):
 def health():
     return {"status": "ok"}
 
-"""
 
 @app.get("/user/{username}", response_class=HTMLResponse)
 def public_profile(username: str, request: Request, db: Session = Depends(get_db)):
@@ -278,4 +277,3 @@ def public_profile(username: str, request: Request, db: Session = Depends(get_db
         "user": get_current_user(request, db) # The person currently browsing
     })
 
-"""
