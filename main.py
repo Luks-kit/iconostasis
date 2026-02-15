@@ -50,11 +50,10 @@ def get_db():
     finally:
         db.close()
 
-def get_current_user(request: Request, db: Session = Depends(get_db)):
+def get_current_user(request: Request, db: Session):
     user_id = request.session.get("user_id")
     if not user_id:
         return None
-
     return db.query(User).filter(User.id == int(user_id)).first()
 
 
@@ -69,7 +68,7 @@ def home(
     region: str = Query(None)
 ):
     query = db.query(Icon)
-    user = get_current_user(request)
+    user = get_current_user(request, db)
 
     # Filter by tradition
     if tradition_id > 0:
@@ -129,7 +128,7 @@ def upload_icon(
 ):
     image_file.file.seek(0)
     
-    user = get_current_user(request)
+    user = get_current_user(request, db)
     if not user:
         return RedirectResponse(url="/login", status_code=303)
 
