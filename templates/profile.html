@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ profile_user.display_name }} (@{{ profile_user.username }}) - Iconostasis</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+    <main class="profile-container">
+        <header class="profile-header">
+            <div class="user-info">
+                <h1>{{ profile_user.display_name }}</h1>
+                <p class="username">@{{ profile_user.username }}</p>
+            </div>
+            
+            {% if user and user.id == profile_user.id %}
+            <div class="profile-actions">
+                <a href="/settings" class="btn-secondary">Edit Profile</a>
+            </div>
+            {% endif %}
+        </header>
+
+        <hr>
+
+        <section class="user-gallery">
+            <h2>Uploads ({{ icons|length }})</h2>
+            
+            {% if icons %}
+                <div class="icon-grid">
+                    {% for icon in icons %}
+                    <div class="icon-card">
+                        <a href="/icon/{{ icon.id }}">
+                            <img src="{{ icon.image_url }}" alt="{{ icon.title }}" loading="lazy">
+                            <div class="icon-info">
+                                <h3>{{ icon.title }}</h3>
+                                <span>{{ icon.century }}</span>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <p>This user hasn't shared any icons yet.</p>
+                    {% if user and user.id == profile_user.id %}
+                        <a href="/upload" class="btn-primary">Upload your first icon</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </section>
+    </main>
+
+</body>
+</html>
