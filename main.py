@@ -106,12 +106,12 @@ def icon_detail(request: Request, icon_id: int, db: Session = Depends(get_db)):
     icon = db.query(Icon).filter(Icon.id == icon_id).first()
     if not icon:
         return HTMLResponse(content="Icon not found", status_code=404)
-    return templates.TemplateResponse("icon.html", {"request": request, "icon": icon, "user": get_current_user(request)})
+    return templates.TemplateResponse("icon.html", {"request": request, "icon": icon, "user": get_current_user(request, db)})
 
 @app.get("/upload", response_class=HTMLResponse)
 def upload_form(request: Request, db: Session =  Depends(get_db)):
     traditions = db.query(Tradition).all()
-    return templates.TemplateResponse("upload.html", {"request": request, "traditions": traditions, "user": get_current_user(request)})
+    return templates.TemplateResponse("upload.html", {"request": request, "traditions": traditions, "user": get_current_user(request, db)})
 
 @app.post("/upload", response_class=HTMLResponse)
 def upload_icon(
