@@ -108,6 +108,7 @@ def icon_detail(request: Request, icon_id: int, db: Session = Depends(get_db)):
         return HTMLResponse(content="Icon not found", status_code=404)
     return templates.TemplateResponse("icon.html", {"request": request, "icon": icon, "user": get_current_user(request, db)})
 
+
 @app.get("/upload", response_class=HTMLResponse)
 def upload_form(request: Request, db: Session =  Depends(get_db)):
     traditions = db.query(Tradition).all()
@@ -210,10 +211,15 @@ def signup_user(
     request: Request,
     db: Session =  Depends(get_db),
     username: str = Form(...),
+    displayname: str = Form(...),
     email: str = Form(...),
     password: str = Form(...)
 ):
-   
+
+    import re.fullmatch
+    if not fullmatch("^[a-zA-Z0-0_]*$", username):
+        return templates.TemplateResponse("signup.html", {"error": "Username must be alphanumeric"})
+        
     if db.query(User).filter(User.username == username).first():
         return templates.TemplateResponse("signup.html", {
             "request": request, 
@@ -231,6 +237,7 @@ def signup_user(
     # We .decode('utf-8') the hash to store it as a string in Postgres
     new_user = User(
         username=username,
+        display_name=displayname,
         email=email,
         hashed_pw=hashed_password.decode('utf-8')
     )
@@ -249,4 +256,24 @@ async def logout(request: Request):
 def health():
     return {"status": "ok"}
 
+"""
 
+@app.get("/user/{username}", response_class=HTMLResponse)
+def public_profile(username: str, request: Request, db: Session = Depends(get_db)):
+    # Look up by the unique username string
+    target_user = db.query(User).filter(User.username == username).first()
+    
+    if not target_user:
+        raise HTTPException(status_code=404, detail="User not found")
+        
+    # Get all icons uploaded by this specific user
+    user_icons = db.query(Icon).filter(Icon.user_id == target_user.id).all()
+    
+    return templates.TemplateResponse("profile.html", {
+        "request": request,
+        "profile_user": target_user,
+        "icons": user_icons,
+        "user": get_current_user(request, db) # The person currently browsing
+    })
+
+"""
