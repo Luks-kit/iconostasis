@@ -50,12 +50,11 @@ def get_db():
     finally:
         db.close()
 
-def get_current_user(request: Request):
+def get_current_user(request: Request, db: Session = Depends(get_db)):
     user_id = request.session.get("user_id")
     if not user_id:
         return None
 
-    db = SessionLocal()
     return db.query(User).filter(User.id == int(user_id)).first()
 
 
@@ -104,7 +103,7 @@ def home(
 
 # Icon detail page
 @app.get("/icon/{icon_id}", response_class=HTMLResponse)
-def icon_detail(request: Request, db: Session =  Depends(get_db), icon_id: int):
+def icon_detail(request: Request, icon_id: int, db: Session = Depends(get_db)):
     icon = db.query(Icon).filter(Icon.id == icon_id).first()
     if not icon:
         return HTMLResponse(content="Icon not found", status_code=404)
