@@ -2,7 +2,7 @@ import os
 import cloudinary
 import cloudinary.uploader
 import bcrypt
-from fastapi import FastAPI, Request, Query, Form, UploadFile, File, HTTPException, status
+from fastapi import FastAPI, Request, Query, Form, UploadFile, File, HTTPException, Depends, status
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
@@ -27,17 +27,11 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # SQLite/PostgreSQL connection
 # Note: Neon requires SSL, so we ensure the URL ends with ?sslmode=require
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///database.db")
+DATABASE_URL = os.getenv("DATABASE_URL")
 if DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
-# Conditional connect_args
-connect_args = {}
-if DATABASE_URL.startswith("sqlite"):
-    connect_args = {"check_same_thread": False}
-
-engine = create_engine(DATABASE_URL, connect_args=connect_args, pool_pre_ping=True)
-Base.metadata.create_all(bind=engine)
+engine = create_engine(DATABASE_URL, connect_args=connect_args, pool_pre_ping=True, pool_size=1, max_overflow=0)
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
 # 2. Cloudinary Configuration
@@ -68,13 +62,13 @@ def get_current_user(request: Request):
 # Home page
 @app.get("/", response_class=HTMLResponse)
 def home(
-    request: Request,
+    request: Request, 
+    db: Session =  Depends(get_db),
     saint: str = Query(None),
     tradition_id: int = Query(0),
     century: str = Query(None),
     region: str = Query(None)
 ):
-    db = SessionLocal()
     query = db.query(Icon)
     user = get_current_user(request)
 
@@ -110,22 +104,21 @@ def home(
 
 # Icon detail page
 @app.get("/icon/{icon_id}", response_class=HTMLResponse)
-def icon_detail(request: Request, icon_id: int):
-    db = SessionLocal()
+def icon_detail(request: Request, db: Session =  Depends(get_db), icon_id: int):
     icon = db.query(Icon).filter(Icon.id == icon_id).first()
     if not icon:
         return HTMLResponse(content="Icon not found", status_code=404)
     return templates.TemplateResponse("icon.html", {"request": request, "icon": icon, "user": get_current_user(request)})
 
 @app.get("/upload", response_class=HTMLResponse)
-def upload_form(request: Request):
-    db = SessionLocal()
+def upload_form(request: Request, db: Session =  Depends(get_db)):
     traditions = db.query(Tradition).all()
     return templates.TemplateResponse("upload.html", {"request": request, "traditions": traditions, "user": get_current_user(request)})
 
 @app.post("/upload", response_class=HTMLResponse)
 def upload_icon(
     request: Request,
+    db: Session =  Depends(get_db),
     title: str = Form(...),
     century: str = Form(None),
     region: str = Form(None),
@@ -135,7 +128,6 @@ def upload_icon(
     saints: str = Form(None),
     image_file: UploadFile = File(...)
 ):
-    db = SessionLocal()
     image_file.file.seek(0)
     
     user = get_current_user(request)
@@ -180,10 +172,10 @@ def log_in_form(request: Request):
 @app.post("/login", response_class=HTMLResponse)
 def log_in( 
     request: Request,
+    db: Session =  Depends(get_db),
     username: str = Form(...), 
     password: str = Form(...)
 ):
-    db = SessionLocal()
     
     # 1. Look for the user
     user = db.query(User).filter(User.username == username).first()
@@ -217,11 +209,11 @@ def signup_form(request: Request):
 
 @app.post("/signup")
 def signup_user(
+    db: Session =  Depends(get_db),
     username: str = Form(...),
     email: str = Form(...),
     password: str = Form(...)
 ):
-    db = SessionLocal()
    
     if db.query(User).filter(User.username == username).first():
         return RedirectResponse(url="/signup", staus_code=409)
