@@ -241,3 +241,8 @@ async def logout(request: Request):
     request.session.clear()
     return RedirectResponse("/", status_code=303)
 
+@app.api_route("/health", methods=["GET", "HEAD"])
+def health():
+    return {"status": "ok"}
+
+
