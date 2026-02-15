@@ -8,6 +8,27 @@
 </head>
 <body>
 
+    
+    <div class="navbar">
+        <div class="nav-left">
+            <h2 class="site-title">Iconostasis</h2>
+            <a href="/">Home</a>
+            <a href="/upload">Upload</a>
+        </div>
+    
+        <div class="nav-right">
+            {% if user %}
+                <div class="username-display">
+                    Logged in as <a href="/user/{{ user.username }}"><strong>{{ user.display_name }}</strong></a>
+                </div>
+                <a href="/logout">Logout</a>
+            {% else %}
+                <a href="/login">Login</a>
+                <a href="/signup">Register</a>
+            {% endif %}
+        </div>
+    </div>
+    
     <main class="login-container">
         <h1>Join Iconostasis</h1>
         
