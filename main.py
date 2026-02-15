@@ -31,7 +31,7 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 if DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
-engine = create_engine(DATABASE_URL, connect_args=connect_args, pool_pre_ping=True, pool_size=1, max_overflow=0)
+engine = create_engine(DATABASE_URL, connect_args={}, pool_pre_ping=True, pool_size=1, max_overflow=0)
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
 # 2. Cloudinary Configuration
