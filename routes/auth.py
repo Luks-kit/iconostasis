@@ -9,7 +9,7 @@ from fastapi.templating import Jinja2Templates
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
-DEFAULT_MOD_RANK_NAME = "User"
+DEFAULT_MOD_RANK_NAME = "Catechumen"
 
 @router.get("/login")
 def login_form(request: Request):
