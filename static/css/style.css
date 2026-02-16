@@ -98,7 +98,7 @@
     /* Page layout */
     .container {
         display: flex;
-        height: 100vh;
+        min-height: 100vh;
     }
 
     .btn-submit {
@@ -138,6 +138,7 @@
 
     .sidebar.collapsed {
         width: 70px;
+        height: 100vh;
     }
 
     .sidebar-content {
