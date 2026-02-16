@@ -3,11 +3,13 @@ from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 import bcrypt
 from dependencies import get_db, get_current_user
-from models import User
+from models import ModRank, User
 from fastapi.templating import Jinja2Templates
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
+
+DEFAULT_MOD_RANK_NAME = "User"
 
 @router.get("/login")
 def login_form(request: Request):
@@ -36,8 +38,22 @@ def signup_user(request: Request, db: Session = Depends(get_db), username: str =
     if db.query(User).filter(User.username == username).first():
         return templates.TemplateResponse("signup.html", {"request": request, "error": "Username already taken"}, status_code=409)
 
+    default_rank = db.query(ModRank).filter(ModRank.name == DEFAULT_MOD_RANK_NAME).first()
+    if not default_rank:
+        return templates.TemplateResponse(
+            "signup.html",
+            {"request": request, "error": "Signup is temporarily unavailable. Please try again shortly."},
+            status_code=503,
+        )
+
     hashed_pw = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
-    new_user = User(username=username, display_name=displayname, email=email, hashed_pw=hashed_pw)
+    new_user = User(
+        username=username,
+        display_name=displayname,
+        email=email,
+        hashed_pw=hashed_pw,
+        mod_rank_id=default_rank.id,
+    )
     db.add(new_user)
     db.commit()
     return RedirectResponse("/login", status_code=302)

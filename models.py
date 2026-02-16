@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, Table
+from sqlalchemy import Boolean, Column, Integer, String, Text, ForeignKey, Table
 from sqlalchemy.orm import relationship, declarative_base
 
 Base = declarative_base()
@@ -48,9 +48,25 @@ class User(Base):
     display_name = Column(String, nullable=False)
     email = Column(String, nullable=False)
     hashed_pw = Column(String(255), nullable=False)
+    mod_rank_id = Column(Integer, ForeignKey("mod_ranks.id"), nullable=False)
     # Relationships
     icons = relationship("Icon", back_populates="creator")
     comments = relationship("Comment", back_populates="author")
+    mod_rank = relationship("ModRank", back_populates="users")
+
+
+class ModRank(Base):
+    __tablename__ = "mod_ranks"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50), unique=True, nullable=False)
+    description = Column(Text, nullable=False)
+    requires_moderation = Column(Boolean, nullable=False, default=True)
+    can_moderate = Column(Boolean, nullable=False, default=False)
+    can_lock_conversations = Column(Boolean, nullable=False, default=False)
+    is_admin = Column(Boolean, nullable=False, default=False)
+
+    users = relationship("User", back_populates="mod_rank")
 
 class Comment(Base):
     __tablename__ = "comments"
@@ -61,4 +77,3 @@ class Comment(Base):
     icon_id = Column(Integer, ForeignKey("icons.id"))
     # Relationships
     author = relationship("User", back_populates="comments")
-
