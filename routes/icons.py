@@ -1,0 +1,91 @@
+from fastapi import APIRouter, Request, Depends, Form, Query, File, UploadFile
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import RedirectResponse, HTMLResponse
+import cloudinary
+import cloudinary.uploader
+from sqlalchemy.orm import Session
+from dependencies import get_db, get_current_user, HTMLResponse
+from models import Icon, Saint, Tradition, User
+
+
+templates = Jinja2Templates(directory="templates")
+router = APIRouter()
+
+@router.get("/icon/{icon_id}", response_class=HTMLResponse)
+def icon_detail(request: Request, icon_id: int, db: Session = Depends(get_db)):
+    icon = db.query(Icon).filter(Icon.id == icon_id).first()
+    if not icon:
+        return HTMLResponse(content="Icon not found", status_code=404)
+    
+    user = get_current_user(request, db)
+    return templates.TemplateResponse("icon.html", {
+        "request": request,
+        "user": user,
+        "icon": icon,
+        "uploader_name": db.query(User).filter(User.id == icon.user_id).first().display_name    
+    })
+    
+@router.get("/upload", response_class=HTMLResponse)
+def upload_form(request: Request, db: Session = Depends(get_db)):
+    user = get_current_user(request, db)
+    if not user:
+        return RedirectResponse(url="/login", status_code=303)
+    
+    traditions = db.query(Tradition).all()
+    return templates.TemplateResponse("upload.html", {
+        "request": request,
+        "user": user,
+        "traditions": traditions
+    })
+
+@router.post("/upload", response_class=HTMLResponse)
+def upload_icon(
+    request: Request,
+    db: Session = Depends(get_db),
+    title: str = Form(...),
+    century: str = Form(None),
+    region: str = Form(None),
+    iconographer: str = Form(None),
+    description: str = Form(None),
+    saints: str = Form(None),  # Comma-separated saint names
+    tradition_id: int = Form(...),
+    image_file: UploadFile = File(...)
+):
+    user = get_current_user(request, db)
+    if not user:
+        return RedirectResponse(url="/login", status_code=303)
+    
+    image_file.file.seek(0)
+    upload_result = cloudinary.uploader.upload(image_file.file)
+    image_url = upload_result["secure_url"]
+    
+    # Create new icon
+    new_icon = Icon(
+        title=title,
+        image_url=image_url,
+        century=century,
+        region=region,
+        iconographer=iconographer,
+        description=description,
+        tradition_id=tradition_id,
+        user_id=user.id
+    )
+    
+    if saints:
+        saint_names = [s.strip() for s in saints.split(",")]
+        for name in saint_names:
+            saint = db.query(Saint).filter(Saint.name == name).first()
+            if not saint:
+                saint = Saint(name=name)
+                db.add(saint)
+                db.commit()
+            new_icon.saints.append(saint)
+
+    db.add(new_icon)
+    db.commit()
+    
+    return templates.TemplateResponse("upload_success.html", {
+        "request": request,
+        "user": user,
+        "icon": new_icon
+    })

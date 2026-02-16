@@ -3,7 +3,7 @@
 <head>
     <title>{{ icon.title }} - Iconostasis</title>
     <link rel="stylesheet" type="text/css" href="/static/css/style.css?v=1"> 
-    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon">
 </head>
 <body>
 
@@ -17,7 +17,7 @@
     <div class="nav-right">
         {% if user %}
             <div class="username-display">
-                Logged in as <a href="/user/{{ user.username }}" style="font-weight: bold;" >{{ user.display_name }}</a>
+                Logged in as <a href="/user/{{ user.username }}" style="font-weight: bold;">{{ user.display_name }}</a>
             </div>
             <a href="/logout">Logout</a>
         {% else %}
