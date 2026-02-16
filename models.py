@@ -61,11 +61,6 @@ class ModRank(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(50), unique=True, nullable=False)
     description = Column(Text, nullable=False)
-    requires_moderation = Column(Boolean, nullable=False, default=True)
-    can_moderate = Column(Boolean, nullable=False, default=False)
-    can_lock_conversations = Column(Boolean, nullable=False, default=False)
-    is_admin = Column(Boolean, nullable=False, default=False)
-
     users = relationship("User", back_populates="mod_rank")
 
 class Comment(Base):

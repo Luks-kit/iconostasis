@@ -31,36 +31,24 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 DEFAULT_MOD_RANKS = [
     {
-        "name": "User",
+        "name": "Catechumen",
         "description": "Can candle, but all other actions need moderation approval.",
-        "requires_moderation": True,
-        "can_moderate": False,
-        "can_lock_conversations": False,
-        "is_admin": False,
+
     },
     {
-        "name": "Trusted User",
+        "name": "Laity",
         "description": "Can perform actions without moderation approval.",
-        "requires_moderation": False,
-        "can_moderate": False,
-        "can_lock_conversations": False,
-        "is_admin": False,
+
     },
     {
-        "name": "Moderator",
+        "name": "Subdeacon",
         "description": "Can approve or deny posts and lock conversations.",
-        "requires_moderation": False,
-        "can_moderate": True,
-        "can_lock_conversations": True,
-        "is_admin": False,
+
     },
     {
-        "name": "Admin",
+        "name": "Deacon",
         "description": "Administrative account with direct database access.",
-        "requires_moderation": False,
-        "can_moderate": True,
-        "can_lock_conversations": True,
-        "is_admin": True,
+
     },
 ]
 
