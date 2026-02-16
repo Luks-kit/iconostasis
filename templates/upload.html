@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Upload Icon - Iconostasis</title>
-    <link rel="stylesheet" type="text/css" href="/static/css/style.css?v=3">
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css?v=4">
     <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon">
 </head>
 <body>
@@ -32,16 +32,15 @@
 
 <div class="container">
     <!-- Sidebar -->
-    <div class="sidebar">
+    <div class="sidebar" style="padding: 20px;">
         <h3>Upload Instructions</h3>
         <p>Fill out all fields. Enter existing saints or new ones (comma separated).</p>
-        <p>Images will be saved locally in <code>/static/images/</code>.</p>
     </div>
 
     <!-- Main content -->
-    <div class="main">
+    <div class="upload-main">
         <h1>Upload New Icon</h1>
-        <form action="/upload" method="post" enctype="multipart/form-data">
+        <form action="/upload" method="post" enctype="multipart/form-data" class="upload-form">
             <label>Title:</label><br>
             <input type="text" name="title" required><br><br>
 
