@@ -16,3 +16,4 @@ def get_current_user(request: Request, db: Session = Depends(get_db)):
     if not user_id:
         return None
     return db.query(User).filter(User.id == int(user_id)).first()
+
