@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>{{ icon.title }} - Iconostasis</title>
-    <link rel="stylesheet" type="text/css" href="/static/css/style.css?v=1"> 
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css?v=3"> 
     <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon">
 </head>
 <body>
@@ -26,14 +26,18 @@
         {% endif %}
     </div>
 </div>
+
+
 <div class="container">
     <!-- Sidebar -->
-    <div class="sidebar">
-        <h3>Icon Details</h3>
-        <p><strong>Title:</strong> {{ icon.title }}</p>
-        <p><strong>Saint(s):</strong> 
-            {% for saint in icon.saints %}
-                <a href="/?saint={{saint.name}}">{{ saint.name }}{% if not loop.last %}, {% endif %}</a>
+    <aside id="sidebar" class="sidebar">
+        <button id="sidebarToggle" class="toggle-btn">☰</button>
+        <div class="sidebar-content">
+            <h3>Icon Details</h3>
+            <p><strong>Title:</strong> {{ icon.title }}</p>
+            <p><strong>Saint(s):</strong> 
+                {% for saint in icon.saints %}
+                    <a href="/?saint={{saint.name}}">{{ saint.name }}{% if not loop.last %}, {% endif %}</a>
             {% endfor %}
         </p>
         <p><strong>Tradition:</strong> <a href="/?tradition_id={{ icon.tradition.id }}">{{ icon.tradition.name }}</p></a>
@@ -41,15 +45,21 @@
         <p><strong>Region:</strong> <a href="/?region={{ icon.region }}"> {{ icon.region }}</p></a>
         <p><strong>Iconographer:</strong> {{ icon.iconographer or "Unknown" }}</p>
         <p><strong>Uploaded by:</strong> <a href="/user/{{ icon.creator.username }}">{{uploader_name}}</p></a>
-    </div>
+    </aside>
 
     <!-- Main content -->
     <div class="main">
-        <img class="icon-img" src="{{ icon.image_url }}" alt="{{ icon.title }}">
-        <h2>Description</h2>
-        <p>{{ icon.description }}</p>
+        <div class="icon-detail">
+            <img class="icon-img" src="{{ icon.image_url }}" alt="{{ icon.title }}">
+            <div class="icon-description">
+                <h2>Description</h2>
+                <p>{{ icon.description }}</p>
+            </div>
+        </div>
     </div>
 </div>
+
+<script src="/static/js/sidebar.js"></script>
 
 </body>
 </html>

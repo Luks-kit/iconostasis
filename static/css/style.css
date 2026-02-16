@@ -4,13 +4,13 @@
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         margin: 0;
         padding: 0;
-        background-color: #f7f7f7;
-        color: #333;
+        background-color: #1C1A18;
+        color: #C8BFAF;
     }
 
     a {
         text-decoration: none;
-        color: #2c3e50;
+        color: #F4F1E8;
     }
 
     a:hover {
@@ -18,7 +18,7 @@
     }
 
     h1, h2, h3 {
-        color: #2c3e50;
+        color: #6c88c6;
     }
 
     input, select, textarea {
@@ -40,6 +40,7 @@
         transition: background-color 0.2s ease-in-out;
     }
 
+
     input[type="submit"]:hover {
         background-color: #3498db;
     }
@@ -51,8 +52,9 @@
         
         align-items: center;
         padding: 15px 25px;
-        background-color: #34495e;
-        color: white;
+        background-color: #C9A227;
+        border-bottom: #7A1E1E solid 3px;
+        color: #F4F1E8;
     }
 
     .nav-left {
@@ -85,7 +87,6 @@
         border-radius: 6px;
     }
 
-
     .navbar a {
         color: white;
         margin-right: 20px;
@@ -94,23 +95,75 @@
     .navbar a:hover {
         color: #ecf0f1;
     }
-        /* Page layout */
-        .container {
-            display: flex;
-        }
+    /* Page layout */
+    .container {
+        display: flex;
+        height: 100vh;
+    }
+
+    .btn-submit {
+        background-color: #2980b9;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.2s ease-in-out;
+        border-radius: 2px;
+    }
 
         /* Left sidebar */
     .sidebar {
         width: 250px;
-        padding: 20px;
-        background-color: #ecf0f1;
-        border-right: 1px solid #ddd;
+        background-color: #241E1A;
+        border-right: 2px solid #7A1E1E;
         box-sizing: border-box;
-        min-height: 80vh;
-        position: sticky;
+        position: sticky;   
         top: 0;
+        
     }
+
+    .sidebar label {
+        margin-top: 0;
+        color: #C9A227;
+    }
+    .sidebar a {
+        color: #F4F1E8;
+    }
+
+    .sidebar a:hover {
+        color: #C9A227;
+        background: rgba(201,162,39,0.08);
         /* Main content */
+    }
+
+    .sidebar.collapsed {
+        width: 70px;
+    }
+
+    .sidebar-content {
+        padding: 20px;
+    }
+
+    .sidebar.collapsed .sidebar-content {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0s ease;
+    }
+
+    .toggle-btn {
+        position: absolute;
+        top: 15px;
+        right: -18px;
+        background: #C9A227;
+        color: #1C1A18;
+        border: none;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
     .main {
         flex: 1;
         padding: 20px;
@@ -142,12 +195,12 @@
     .login-form {
         text-align: center;
         padding: 20px;
-        border: 1px solid #ccc;
+        border: 1px solid #C9A227;
         width: 300px;
     }
 
    .icon-card {
-        background-color: white;
+        background-color: #2A2420;
         height: 300px;
         width: 180px;  /* Fixed width is often safer than aspect-ratio for grid flow */
         text-align: center;
@@ -155,7 +208,6 @@
         box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         transition: transform 0.2s, box-shadow 0.2s;
         overflow: hidden;
-    
         /* The Magic Sauce */
         display: flex;
         flex-direction: column;
@@ -184,14 +236,31 @@
             cursor: pointer;
         } 
 
+    .icon-detail {
+        display: grid;
+        grid-template-columns: 400px 1fr;
+        gap: 2rem;
+        align-items: start;
+        justify-items: stretch;
+    }
+
+
+    .icon-description {
+        display: flex;
+        flex-direction: column;
+    }
+    
+
     .icon-img {
-        max-width: 50%;   /* ensures image never exceeds container width */
-        max-height: 500px; /* scale down very tall images */
+        max-width: 70%;   /* ensures image never exceeds container width */
+        aspect-ratio: auto; /* maintain original aspect ratio */
         height: auto;       /* maintain aspect ratio */
-        border: 1px solid #ccc;
+        border: 4px solid #C9A227;
         display: block;
         margin-bottom: 20px;
     }
+
+
 
     @media (max-width: 768px) {
         .container {
@@ -201,7 +270,7 @@
         .sidebar {
             width: 100%;
             border-right: none;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid #7A1E1E;
             min-height: auto;
             position: relative;
             top: auto;

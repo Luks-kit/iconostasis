@@ -16,6 +16,7 @@ def login_form(request: Request):
 @router.post("/login")
 def login_user(request: Request, db: Session = Depends(get_db), username: str = Form(...), password: str = Form(...)):
     user = db.query(User).filter(User.username == username).first()
+    
     if not user or not bcrypt.checkpw(password.encode("utf-8"), user.hashed_pw.encode("utf-8")):
         return templates.TemplateResponse("login.html", {"request": request, "error": "Invalid credentials"}, status_code=401)
 
