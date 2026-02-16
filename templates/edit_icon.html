@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Icon - Iconostasis</title>
+    <link rel="stylesheet" href="/static/css/style.css?v=4">
+    <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="navbar">
+        <div class="nav-left">
+            <h2 class="site-title">Iconostasis</h2>
+            <a href="/">Home</a>
+            <a href="/upload">Upload</a>
+        </div>
+        <div class="nav-right">
+            {% if user %}
+                <div class="username-display">
+                    Logged in as <a href="/user/{{ user.username }}" style="font-weight: bold;">{{ user.display_name }}</a>
+                </div>
+                <a href="/logout">Logout</a>
+            {% else %}
+                <a href="/login">Login</a>
+                <a href="/signup">Register</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="upload-main">
+    <h1>Edit Icon: {{ icon.title }}</h1>
+    <form action="/icon/{{ icon.id }}/edit" method="POST" class="upload-form">
+        <label>Title</label>
+        <input type="text" name="title" value="{{ icon.title }}" required>
+
+        <label>Century</label>
+        <input type="text" name="century" value="{{ icon.century }}">
+
+        <label>Region</label>
+        <input type="text" name="region" value="{{ icon.region }}">
+
+        <label>Tradition</label>
+        <select name="tradition_id">
+            {% for t in traditions %}
+                <option value="{{ t.id }}" {% if t.id == icon.tradition_id %}selected{% endif %}>
+                    {{ t.name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <label>Description</label>
+        <textarea name="description" style="width: 100%; height: 150px;">{{ icon.description }}</textarea>
+
+        <button type="submit" class="btn-primary">Save Changes</button>
+        <a href="/icon/{{ icon.id }}" class="btn-secondary">Cancel</a>
+    </form>
+</div>
+    
+</body>
+</html>

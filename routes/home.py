@@ -7,6 +7,7 @@ from models import Icon, Saint, Tradition
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
+# Home page with optional filters for saint, tradition, century, and region
 @router.get("/", response_class=HTMLResponse)
 def home(request: Request, db: Session = Depends(get_db), saint: str = Query(None), tradition_id: int = Query(0), century: str = Query(None), region: str = Query(None)):
     query = db.query(Icon)

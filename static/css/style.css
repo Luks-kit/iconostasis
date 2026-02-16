@@ -101,7 +101,14 @@
         min-height: 100vh;
     }
 
-    .btn-submit {
+    .upload-form {
+        background-color: #2A2420;
+        padding: 20px;
+        border-radius: 8px;
+        border: 1px solid #C9A227;
+    }
+
+    .btn-submit, .btn-primary, .btn-danger-small {
         background-color: #2980b9;
         color: white;
         border: none;
@@ -171,6 +178,14 @@
         display: flex;
         flex-wrap: wrap;
         gap: 20px;
+    }
+
+    .upload-main {
+        display: block;
+        align-items: center;
+        margin: 0 auto;
+        padding: 20px;
+        width: 60%;
     }
 
     .icon-grid{
@@ -261,6 +276,37 @@
         margin-bottom: 20px;
     }
 
+    .editable-text {
+        padding: 4px 8px;
+        border: 1px dashed transparent;
+        transition: all 0.2s;
+        cursor: pointer;
+        font-weight: bold;
+        border-radius: 4px;
+    }
+
+    .editable-text:hover {
+        background-color: #f0f0f0;
+        border-color: #ccc;
+        color: #1c1c1c;
+    }
+
+    .editable-text:focus {
+        outline: none;
+        background-color: white;
+        border: 1px solid #007bff;
+        cursor: text;
+        color: #1c1c1c
+    }
+
+    .settings-container, .edit-icon-container, .manage-uploads {
+        margin: 0 auto;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    
 
 
     @media (max-width: 768px) {

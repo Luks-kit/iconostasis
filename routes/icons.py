@@ -11,6 +11,8 @@ from models import Icon, Saint, Tradition, User
 templates = Jinja2Templates(directory="templates")
 router = APIRouter()
 
+
+# Display details for a specific icon
 @router.get("/icon/{icon_id}", response_class=HTMLResponse)
 def icon_detail(request: Request, icon_id: int, db: Session = Depends(get_db)):
     icon = db.query(Icon).filter(Icon.id == icon_id).first()
@@ -24,7 +26,103 @@ def icon_detail(request: Request, icon_id: int, db: Session = Depends(get_db)):
         "icon": icon,
         "uploader_name": db.query(User).filter(User.id == icon.user_id).first().display_name    
     })
+
+
+@router.post("/icon/{icon_id}/delete")
+def delete_icon(
+    icon_id: int, 
+    db: Session = Depends(get_db), 
+    request: Request = None # Needed to get session user
+    ):
+    user = get_current_user(request, db)
+    if not user:
+        raise HTTPException(status_code=401)
+
+    icon = db.query(Icon).filter(Icon.id == icon_id).first()
     
+    if not icon:
+        raise HTTPException(status_code=404)
+
+    # Permission Check: Only owner or admin
+    if icon.user_id != user.id and not user.is_admin:
+        raise HTTPException(status_code=403, detail="Not authorized")
+
+    db.delete(icon)
+    db.commit()
+    return {"status": "success"}
+
+@router.get("/icon/{icon_id}/edit", response_class=HTMLResponse)
+def edit_icon_form(request: Request, icon_id: int, db: Session = Depends(get_db)):
+    user = get_current_user(request, db)
+    if not user:
+        return RedirectResponse(url="/login", status_code=303)
+
+    icon = db.query(Icon).filter(Icon.id == icon_id).first()
+    if not icon:
+        return HTMLResponse(content="Icon not found", status_code=404)
+
+    # Permission Check: Only owner or admin
+    if icon.user_id != user.id and not user.is_admin:
+        return HTMLResponse(content="Not authorized", status_code=403)
+
+    traditions = db.query(Tradition).all()
+    return templates.TemplateResponse("edit_icon.html", {
+        "request": request,
+        "user": user,
+        "icon": icon,
+        "traditions": traditions
+    })
+
+@router.post("/icon/{icon_id}/edit", response_class=HTMLResponse)
+def edit_icon(
+    request: Request,
+    icon_id: int,
+    db: Session = Depends(get_db),
+    title: str = Form(...),
+    century: str = Form(None),
+    region: str = Form(None),
+    iconographer: str = Form(None),
+    description: str = Form(None),
+    saints: str = Form(None),  # Comma-separated saint names
+    tradition_id: int = Form(...)
+):
+    user = get_current_user(request, db)
+    if not user:
+        return RedirectResponse(url="/login", status_code=303)
+
+    icon = db.query(Icon).filter(Icon.id == icon_id).first()
+    if not icon:
+        return HTMLResponse(content="Icon not found", status_code=404)
+
+    # Permission Check: Only owner or admin
+    if icon.user_id != user.id and not user.is_admin:
+        return HTMLResponse(content="Not authorized", status_code=403)
+
+    icon.title = title
+    icon.century = century
+    icon.region = region
+    icon.iconographer = iconographer
+    icon.description = description
+    icon.tradition_id = tradition_id
+
+    if saints is not None:
+        saint_names = [s.strip() for s in saints.split(",")]
+        new_saints = []
+        for name in saint_names:
+            saint = db.query(Saint).filter(Saint.name == name).first()
+            if not saint:
+                saint = Saint(name=name)
+                db.add(saint)
+                db.commit()
+            new_saints.append(saint)
+        icon.saints = new_saints
+
+    db.commit()
+    
+    return RedirectResponse(url=f"/icon/{icon_id}", status_code=303)
+
+
+#Render the icon upload form
 @router.get("/upload", response_class=HTMLResponse)
 def upload_form(request: Request, db: Session = Depends(get_db)):
     user = get_current_user(request, db)
@@ -38,6 +136,8 @@ def upload_form(request: Request, db: Session = Depends(get_db)):
         "traditions": traditions
     })
 
+
+#Handle icon upload form submission
 @router.post("/upload", response_class=HTMLResponse)
 def upload_icon(
     request: Request,

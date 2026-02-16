@@ -11,10 +11,13 @@ templates = Jinja2Templates(directory="templates")
 
 DEFAULT_MOD_RANK_NAME = "Catechumen"
 
+
+#Render the login form
 @router.get("/login")
 def login_form(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
+#Handle login form submission
 @router.post("/login")
 def login_user(request: Request, db: Session = Depends(get_db), username: str = Form(...), password: str = Form(...)):
     user = db.query(User).filter(User.username == username).first()
@@ -25,10 +28,14 @@ def login_user(request: Request, db: Session = Depends(get_db), username: str = 
     request.session["user_id"] = user.id
     return RedirectResponse("/", status_code=status.HTTP_302_FOUND)
 
+
+#Render the signup form
 @router.get("/signup")
 def signup_form(request: Request):
     return templates.TemplateResponse("signup.html", {"request": request})
 
+
+#Handle signup form submission
 @router.post("/signup")
 def signup_user(request: Request, db: Session = Depends(get_db), username: str = Form(...), displayname: str = Form(...), email: str = Form(...), password: str = Form(...)):
     import re
@@ -58,6 +65,7 @@ def signup_user(request: Request, db: Session = Depends(get_db), username: str =
     db.commit()
     return RedirectResponse("/login", status_code=302)
 
+#Handle logout
 @router.get("/logout")
 def logout(request: Request):
     request.session.clear()

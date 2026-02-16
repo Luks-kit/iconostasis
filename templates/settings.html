@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Iconostasis</title>
+    <link rel="stylesheet" href="/static/css/style.css?v=4">
+    <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="navbar">
+        <div class="nav-left">
+            <h2 class="site-title">Iconostasis</h2>
+            <a href="/">Home</a>
+            <a href="/upload">Upload</a>
+        </div>
+        <div class="nav-right">
+            {% if user %}
+                <div class="username-display">
+                    Logged in as <a href="/user/{{ user.username }}" style="font-weight: bold;">{{ user.display_name }}</a>
+                </div>
+                <a href="/logout">Logout</a>
+            {% else %}
+                <a href="/login">Login</a>
+                <a href="/signup">Register</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="settings-container">
+        <h1>Settings</h1>
+        <div class="settings-item">
+            <label>Display Name:</label>
+            <span id="display-name"
+                contenteditable="true" 
+                class="editable-text"
+                data-original="{{ user.display_name }}">{{ user.display_name }}</span>
+            
+            <button id="save-btn" style="display: none;" class="btn-primary">Save Changes</button>  
+
+        </div>
+        
+    </div>
+   
+    <div class="manage-uploads">
+        <hr style="width: 100%;">
+        <h2>Your Uploads</h2>
+        <div class="icon-grid">
+            {% if icons %}
+                {% for icon in icons %}
+                <div class="icon-card" id="icon-row-{{ icon.id }}" style="position: relative; height: 320px;">
+                    <a href="/icon/{{ icon.id }}">
+                    <img src="{{ icon.image_url }}" alt="{{ icon.title }}" class="thumb">
+                    <div class="item-details">
+                        <strong>{{ icon.title }}</strong>
+                    </div>
+                    </a>
+                    <div>
+                        <button class="btn-danger-small" onclick="deleteIcon( {{ icon.id }} )">Delete</button>
+                        <button class="btn-danger-small" onclick="document.location.href='/icon/{{ icon.id }}/edit'">Edit</button>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>You haven't uploaded any icons yet.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="/static/js/settings.js?v=1"></script>
+
+    
+</body>
+</html>
