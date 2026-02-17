@@ -4,7 +4,7 @@ from config import DATABASE_URL
 
 engine = create_engine(
     DATABASE_URL,
-    connect_args={}, 
+    connect_args={"sslmode": "require"}, 
     pool_pre_ping=True, 
     pool_size=10, 
     max_overflow=20,
