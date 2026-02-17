@@ -156,7 +156,7 @@
     .sidebar-content {
         padding: 20px;
     }
-    .sidebar-content input, .sidebar-content select {
+    .sidebar-content input, .sidebar-content select, .login-container input, .upload-form input, .upload-form textarea , .upload-form select {
         background: #2C2A28;
         padding: 10px;
         border-radius: 4px;
@@ -166,7 +166,7 @@
         outline: none;
         border-color: #C9A227;
     }
-    .sidebar-content input[type="submit"] {
+    .sidebar-content input[type="submit"], .upload-form input[type="submit"] {
         background: #C9A227;
         color: #1C1A18;
         border: none;
