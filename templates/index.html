@@ -66,10 +66,18 @@
             <div class="icon-card">
                 <a href="/icon/{{ icon.id }}">
                     <img src="{{ icon.image_url }}" alt="{{ icon.title }}">
+                    <h3>{{ icon.title }}</h3>
                     <div class="icon-info">
-                        <p class="icon-info-title">{{ icon.title }}</p>
-                        <p class="icon-info-stats">🕯️{{icon.venerators|length}} <br>
-                            💬{{icon.comments|length}}</p></div>
+                        <div class="icon-stat">
+                            <span>🕯️</span>
+                            <span>{{ icon.venerators|length }}</span>
+                        </div>
+
+                        <div class="icon-stat">
+                            <span>💬</span>
+                            <span>{{ icon.comments|length }}</span>
+                        </div>
+                    </div>
                 </a>
             </div>
         {% endfor %}

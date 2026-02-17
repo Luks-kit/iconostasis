@@ -252,7 +252,7 @@
    .icon-card {
         background-color: #2A2420;
         height: 350px;
-        width: 180px;  /* Fixed width is often safer than aspect-ratio for grid flow */
+        width: 210px;  /* Fixed width is often safer than aspect-ratio for grid flow */
         text-align: center;
         border-radius: 8px;
         box-shadow: 0 2px 6px rgba(0,0,0,0.1);
@@ -263,19 +263,29 @@
         flex-direction: column;
     }
 
-    .icon-info {
-        justify-content: space-between;
+   .icon-info {
         display: flex;
-        flex-direction: row;
-        gap: 0;
-        font-size: 12px;
+        flex-direction: row; /* Ensure horizontal alignment */
+        justify-content: space-around; /* Spread them out */
+        align-items: center;
+        padding: 5px 10px;
+        gap: 10px;
     }
 
     .icon-card img {
         width: 100%;
-        height: 240px;    /* Give the image a specific portion of the card */
-        object-fit: contain; /* for the icon to retain its usual height */
+        height: 220px;    /* Give the image a specific portion of the card */
+        object-fit: cover; /* for the icon to retain its usual height */
+        object-position: top; /* Align the image to the top of the container */
         display: block;
+    }
+
+    .icon-stat {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 5px; /* Space between icon and number */
+        font-size: 0.9rem;
     }
     
     .icon-card p, .icon-card h3 {
@@ -559,7 +569,7 @@
     /* 4. Icon Cards & Details */
     .icon-card {
         width: 100%; /* Scale cards to container width */
-        max-width: 300px; 
+        max-width: 160px;; 
         height: auto;
     }
 
@@ -570,6 +580,12 @@
 
     .icon-img {
         max-width: 100%;
+    }
+    
+    .icon-info {
+        flex-direction: row !important; /* Force horizontal even on mobile */
+        justify-content: center;
+        gap: 15px;
     }
 
     /* 5. Forms and Inputs */
