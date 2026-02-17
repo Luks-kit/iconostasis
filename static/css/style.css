@@ -249,7 +249,7 @@
 
    .icon-card {
         background-color: #2A2420;
-        height: 300px;
+        height: 350px;
         width: 180px;  /* Fixed width is often safer than aspect-ratio for grid flow */
         text-align: center;
         border-radius: 8px;
@@ -259,6 +259,13 @@
         /* The Magic Sauce */
         display: flex;
         flex-direction: column;
+    }
+
+    .icon-info {
+        justify-content: space-between;
+        display: flex;
+        flex-direction: row;
+        gap: 0;
     }
 
     .icon-card img {
@@ -479,25 +486,92 @@
     
 
 
-    @media (max-width: 768px) {
-        .container {
-            flex-direction: column;
-        }
-
-        .sidebar {
-            width: 100%;
-            border-right: none;
-            border-bottom: 1px solid #7A1E1E;
-            min-height: auto;
-            position: relative;
-            top: auto;
-        }
-
-        .main {
-            justify-content: center;
-        }
-
+    /* Mobile Compatibility Overrides */
+@media screen and (max-width: 768px) {
+    /* 1. Stack the Navigation */
+    .navbar {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+        text-align: center;
     }
 
+    .nav-left, .nav-center, .nav-right {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+    }
 
- 
+    .navbar a {
+        margin-right: 0;
+        display: block;
+        padding: 5px 0;
+    }
+
+    /* 2. Handle the Sidebar and Container */
+    .container {
+        flex-direction: column; /* Stack sidebar on top of main content */
+    }
+
+    .sidebar {
+        width: 100% !important; /* Force full width on mobile */
+        position: relative;
+        border-right: none;
+        border-bottom: 2px solid #7A1E1E;
+    }
+
+    .sidebar.collapsed {
+        width: 100% !important;
+        height: auto;
+    }
+
+    .toggle-btn {
+        display: none; /* Hide toggle button on mobile to save space */
+    }
+
+    /* 3. Adjust Main Content Areas */
+    .main, .icon-grid, .icon-main {
+        padding: 10px;
+        justify-content: center;
+    }
+
+    .upload-main {
+        width: 95%; /* Make upload form wider on small screens */
+    }
+
+    /* 4. Icon Cards & Details */
+    .icon-card {
+        width: 100%; /* Scale cards to container width */
+        max-width: 300px; 
+        height: auto;
+    }
+
+    .icon-detail {
+        grid-template-columns: 1fr; /* Stack image on top of description */
+        justify-items: center;
+    }
+
+    .icon-img {
+        max-width: 100%;
+    }
+
+    /* 5. Forms and Inputs */
+    .login-form {
+        width: 90%;
+        box-sizing: border-box;
+    }
+
+    .comments-container {
+        width: 95%;
+        padding: 10px;
+    }
+
+    /* 6. Typography adjustments */
+    .site-title {
+        font-size: 1.5rem;
+    }
+    
+    h1 {
+        font-size: 1.4rem;
+    }
+}
