@@ -133,7 +133,14 @@
         top: 0;
         
     }
-
+    
+    .upload-done {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+    } 
+    
+    
     .sidebar label {
         margin-top: 0;
         color: #C9A227;
