@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Request, Depends, Form, Query, File, UploadFile
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import RedirectResponse, HTMLResponse
+from fastapi.responses import RedirectResponse, HTMLResponse, JSONResponse
 import cloudinary
 import cloudinary.uploader
 from sqlalchemy.orm import Session

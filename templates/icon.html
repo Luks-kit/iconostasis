@@ -48,72 +48,77 @@
     </aside>
 
     <!-- Main content -->
-    <div class="icon-main">
+        <div class="icon-main">
 
-        <div class="icon-detail">
-            <img class="icon-img" src="{{ icon.image_url }}" alt="{{ icon.title }}">
-            <div class="icon-description">
-                <h2>Description</h2>
-                <p>{{ icon.description }}</p>
+            <div class="icon-detail">
+                <img class="icon-img" src="{{ icon.image_url }}" alt="{{ icon.title }}">
+                <div class="icon-description">
+                    <h2>Description</h2>
+                    <p>{{ icon.description }}</p>
+                </div>
             </div>
-        </div>
 
-        <div class="candle-section">
-            <button id="candle-button" 
-                    class="{% if user in icon.venerators %}candle-active{% endif %}"
-                    onclick="toggleCandle( {{ icon.id }} )">
-                <span id="candle-icon">🕯️</span> 
-                <span id="veneration-count">{{ icon.venerators|length }}</span>
-            </button>
-        </div>
+            <div id="interaction-wrapper" class="interaction-wrapper">
 
-        <section class="comments-container">
-            <h3 class="section-title">Reflections ({{ icon.comments|length }})</h3>
+                <section class="candle-section">
+                    <button id="candle-button" 
+                            class="{% if user in icon.venerators %}candle-active{% endif %}"
+                            onclick="toggleCandle( {{ icon.id }} )">
+                        <span id="candle-icon">🕯️</span> 
+                        <span id="veneration-count">{{ icon.venerators|length }}</span>
+                    </button>
+                </section>
 
-            {% if user %}
-            <form action="/icon/{{ icon.id }}/comment" method="POST" class="comment-form">
-                <textarea id="comment-text" name="text" maxlength="1000" placeholder="Share a reflection or prayer..." required></textarea>
-                <div class="counter-container">
-                    <span id="char-count">1000</span> characters remaining
-                </div>
-                <div class="form-actions">
-                    <button type="submit" class="btn-primary">Post Reflection</button>
-                </div>
-            </form>
-            {% endif %}
+                <section class="comments-container">
+                    <h3 class="section-title">Reflections ({{ icon.comments|length }})</h3>
 
-            <br><br>
-
-            <div class="comments-list">
-                {% for comment in icon.comments|sort(attribute='created_at', reverse=True) %}
-                <div class="comment-card">
-                    <div class="comment-header">
-                        <a href="/user/{{ comment.author.username }}" class="comment-author">
-                            {{ comment.author.display_name }}
-                        </a>
-                        <span class="comment-date">
-                            {{ comment.created_at.strftime('%b %d, %Y') }}
-                        </span>
-                    </div>
-                    
-                    <div class="comment-body">
-                        {{ comment.text }}
-                    </div>
-
-                    {% if user and (user.id == comment.user_id or user.is_admin) %}
-                    <div class="comment-actions">
-                        <a href="/comment/{{ comment.id }}/edit" class="action-link">Edit</a>
-                        <form action="/comment/{{ comment.id }}/delete" method="POST" onsubmit="return confirm('Delete this reflection?');">
-                            <button type="submit" class="action-link delete-text">Delete</button>
-                        </form>
-                    </div>
+                    {% if user %}
+                    <form action="/icon/{{ icon.id }}/comment" method="POST" class="comment-form">
+                        <textarea id="comment-text" name="text" maxlength="1000" placeholder="Share a reflection or prayer..." required></textarea>
+                        <div class="counter-container">
+                            <span id="char-count">1000</span> characters remaining
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">Post Reflection</button>
+                        </div>
+                    </form>
                     {% endif %}
-                </div>
-                {% endfor %}
+
+                    <br><br>
+
+                    <div class="comments-list">
+                        {% for comment in icon.comments|sort(attribute='created_at', reverse=True) %}
+                        <div class="comment-card">
+                            <div class="comment-header">
+                                <a href="/user/{{ comment.author.username }}" class="comment-author">
+                                    {{ comment.author.display_name }}
+                                </a>
+                                <span class="comment-date">
+                                    {{ comment.created_at.strftime('%b %d, %Y') }}
+                                </span>
+                            </div>
+                            
+                            <div class="comment-body">
+                                {{ comment.text }}
+                            </div>
+
+                            {% if user and (user.id == comment.user_id or user.is_admin) %}
+                            <div class="comment-actions">
+                                <a href="/comment/{{ comment.id }}/edit" class="action-link">Edit</a>
+                                <form action="/comment/{{ comment.id }}/delete" method="POST" onsubmit="return confirm('Delete this reflection?');">
+                                    <button type="submit" class="action-link delete-text">Delete</button>
+                                </form>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                </section>
             </div>
-        </section>
+
+        </div>
     </div>
-</div>
 
 <script src="/static/js/sidebar.js"></script>
 <script src="/static/js/icons.js"></script>
