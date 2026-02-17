@@ -5,7 +5,7 @@ import cloudinary
 import cloudinary.uploader
 from sqlalchemy.orm import Session
 from dependencies import get_db, get_current_user, HTMLResponse
-from models import Icon, Saint, Tradition, User
+from models import Icon, Saint, Tradition, User, Comment
 
 
 templates = Jinja2Templates(directory="templates")
@@ -72,6 +72,49 @@ def edit_icon_form(request: Request, icon_id: int, db: Session = Depends(get_db)
         "icon": icon,
         "traditions": traditions
     })
+    
+@router.post("/icon/{icon_id}/comment")
+async def add_comment(
+    icon_id: int, 
+    request: Request, 
+    text: str = Form(...), 
+    db: Session = Depends(get_db)
+):
+    user = get_current_user(request, db)
+    if not user:
+        return RedirectResponse(url="/login", status_code=303)
+
+    new_comment = Comment(
+        text=text.strip(),
+        user_id=user.id,
+        icon_id=icon_id
+    )
+    
+    db.add(new_comment)
+    db.commit()
+    
+    # Redirect back to the icon page to see the new comment
+    return RedirectResponse(url=f"/icon/{icon_id}", status_code=303)
+
+@router.post("/icon/{icon_id}/venerate")
+async def toggle_veneration(icon_id: int, request: Request, db: Session = Depends(get_db)):
+    user = get_current_user(request, db)
+    if not user:
+        return JSONResponse({"error": "Login required"}, status_code=401)
+
+    icon = db.query(Icon).filter(Icon.id == icon_id).first()
+    if not icon:
+        return JSONResponse({"error": "Icon not found"}, status_code=404)
+
+    if user in icon.venerators:
+        icon.venerators.remove(user)
+        action = "unlit"
+    else:
+        icon.venerators.append(user)
+        action = "lit"
+
+    db.commit()
+    return {"action": action, "count": len(icon.venerators)}
 
 @router.post("/icon/{icon_id}/edit", response_class=HTMLResponse)
 def edit_icon(

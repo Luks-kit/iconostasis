@@ -74,6 +74,11 @@
         gap: 15px;
     }
 
+    .username-display a {
+        padding-right: 0 !important;
+        margin-right: 0 !important;
+    }
+
     .site-title {
         margin: 0;
         font-size: 20px;
@@ -151,6 +156,24 @@
     .sidebar-content {
         padding: 20px;
     }
+    .sidebar-content input, .sidebar-content select {
+        background: #2C2A28;
+        padding: 10px;
+        border-radius: 4px;
+        color: #F4F1E8;
+    }
+    .sidebar-content input:focus, .sidebar-content select:focus {
+        outline: none;
+        border-color: #C9A227;
+    }
+    .sidebar-content input[type="submit"] {
+        background: #C9A227;
+        color: #1C1A18;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
 
     .sidebar.collapsed .sidebar-content {
         opacity: 0;
@@ -178,6 +201,15 @@
         display: flex;
         flex-wrap: wrap;
         gap: 20px;
+    }
+
+    .icon-main{
+        flex: 1;
+        padding: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        flex-direction: column;
     }
 
     .upload-main {
@@ -246,11 +278,12 @@
         font-size: 0.9rem;
         line-height: 1.2;
     }
-        .icon-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            cursor: pointer;
-        } 
+    
+    .icon-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        cursor: pointer;
+    } 
 
     .icon-detail {
         display: grid;
@@ -260,10 +293,147 @@
         justify-items: stretch;
     }
 
+    #candle-button {
+        background: none;
+        border: 1px solid #ccc;
+        cursor: pointer;
+        font-size: 1.2rem;
+        border-radius: 20px;
+        padding: 5px 15px;
+        transition: all 0.3s ease;
+    }
+
+    #candle-button.candle-active {
+        border-color: #ff9800;
+        box-shadow: 0 0 10px rgba(255, 152, 0, 0.5);
+        background-color: #fff9c4;
+    }
+
+    #candle-button.candle-active #candle-icon {
+        filter: drop-shadow(0 0 5px orange);
+    }
+
 
     .icon-description {
         display: flex;
         flex-direction: column;
+    }
+
+        /* Container Spacing */
+    .comments-container {
+        width: 85%;
+        margin: 40px auto;
+        padding: 20px;
+        border-top: 1px solid #eee;
+    }
+
+    .counter-container {
+        font-size: 0.8rem;
+        color: #888;
+        text-align: right;
+        margin-top: -5px;
+        margin-bottom: 15px;
+    }
+
+    #char-count {
+        font-weight: bold;
+    }
+
+    .section-title {
+        color: #6c88c6;
+        margin-bottom: 25px;
+    }
+
+    /* Form Styling */
+    .comment-form textarea {
+        width: 100%;
+        height: 100px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background: #2C2A28;
+        color: #F4F1E8;
+        font-family: inherit;
+        resize: vertical;
+        margin-bottom: 10px;
+        transition: border-color 0.3s;
+    }
+
+    .comment-form textarea:focus {
+        outline: none;
+        border-color: #ff9800; /* Matching your candle glow */
+    }
+
+    /* Comment Cards */
+    .comment-card {
+        background: #2A2420;
+        border: 1px solid #7A1E1E;
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        transition: transform 0.2s;
+    }
+
+    .comment-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        font-size: 0.9rem;
+    }
+
+    .comment-author {
+        font-weight: bold;
+        text-decoration: none;
+        color: #C8BFAF;
+    }
+
+    .comment-author:hover {
+        color: #ff9800;
+    }
+
+    .comment-date {
+        color: #888;
+    }
+
+    .edited-tag {
+        font-style: italic;
+        opacity: 0.7;
+        margin-left: 5px;
+    }
+
+    .comment-body {
+        line-height: 1.6;
+        color: #F4F1E8;
+        white-space: pre-line; /* Preserves line breaks from textarea */
+    }
+
+    /* Action Buttons */
+    .comment-actions {
+        margin-top: 12px;
+        display: flex;
+        gap: 15px;
+        font-size: 0.8rem;
+        border-top: 1px solid #f9f9f9;
+        padding-top: 8px;
+    }
+
+    .action-link {
+        color: #007bff;
+        text-decoration: none;
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+    }
+
+    .delete-text {
+        color: #dc3545;
+    }
+
+    .action-link:hover {
+        text-decoration: underline;
     }
     
 

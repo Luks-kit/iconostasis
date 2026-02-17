@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, Integer, String, Text, ForeignKey, Table
+from sqlalchemy import Boolean, Column, Integer, String, Text, ForeignKey, Table, DateTime, func
 from sqlalchemy.orm import relationship, declarative_base
 
 Base = declarative_base()
@@ -9,6 +9,13 @@ icon_saints = Table(
     Base.metadata,
     Column("icon_id", Integer, ForeignKey("icons.id"), primary_key=True),
     Column("saint_id", Integer, ForeignKey("saints.id"), primary_key=True)
+)
+
+candles = Table(
+    "candles",
+    Base.metadata,
+    Column("icon_id", Integer, ForeignKey("icons.id"), primary_key=True),
+    Column("user_id", Integer, ForeignKey("users.id"), primary_key=True)
 )
 
 class Tradition(Base):
@@ -38,7 +45,9 @@ class Icon(Base):
     tradition = relationship("Tradition")
     user_id = Column(Integer, ForeignKey("users.id"))
     creator = relationship("User", back_populates="icons")
+    comments = relationship("Comment", back_populates="icon")
 
+    venerators = relationship("User", secondary=candles, back_populates="candled_icons")
     saints = relationship("Saint", secondary=icon_saints, back_populates="icons")
     
 class User(Base):
@@ -53,6 +62,7 @@ class User(Base):
     icons = relationship("Icon", back_populates="creator")
     comments = relationship("Comment", back_populates="author")
     mod_rank = relationship("ModRank", back_populates="users")
+    candled_icons = relationship("Icon", secondary=candles, back_populates="venerators")
 
 
 class ModRank(Base):
@@ -70,5 +80,8 @@ class Comment(Base):
     # Foreign Keys
     user_id = Column(Integer, ForeignKey("users.id"))
     icon_id = Column(Integer, ForeignKey("icons.id"))
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
     # Relationships
     author = relationship("User", back_populates="comments")
+    icon = relationship("Icon", back_populates="comments")
+

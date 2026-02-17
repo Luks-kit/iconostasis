@@ -71,6 +71,32 @@
                 </div>
             {% endif %}
         </section>
+
+
+        <section class="venerated-icons">
+            <h2>Venerated Icons ({{ venerated_icons|length }})</h2>
+            
+            {% if venerated_icons %}
+                <div class="icon-grid">
+                    {% for icon in venerated_icons %}
+                    <div class="icon-card">
+                        <a href="/icon/{{ icon.id }}">
+                            <img src="{{ icon.image_url }}" alt="{{ icon.title }}" loading="lazy">
+                            <div class="icon-info">
+                                <h3>{{ icon.title }}</h3>
+                                <span>{{ icon.century }}</span>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <p>This user hasn't venerated any icons yet.</p>
+                </div>
+            {% endif %}
+        </section>
+
     </main>
 
 </body>

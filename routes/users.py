@@ -14,14 +14,17 @@ def user_profile(request: Request, username: str, db: Session = Depends(get_db))
     if not user:
         return HTMLResponse(content="User not found", status_code=404)
     
+    venerated_icons = db.query(Icon).filter(Icon.venerators.any(id=user.id)).all()
     icons = db.query(Icon).filter(Icon.user_id == user.id).all()
     current_user = get_current_user(request, db)
+    
     
     return templates.TemplateResponse("profile.html", {
         "request": request,
         "user": current_user,
         "profile_user": user,
-        "icons": icons
+        "icons": icons,
+        "venerated_icons": venerated_icons
     })
     
 #Settings page for each user
