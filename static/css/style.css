@@ -524,27 +524,37 @@
 @media screen and (max-width: 768px) {
     /* 1. Stack the Navigation */
     .navbar {
-        flex-direction: column;
-        gap: 15px;
-        padding: 15px;
-        text-align: center;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        padding: 10px;
     }
 
-    .nav-left, .nav-center, .nav-right {
-        flex-direction: column;
-        width: 100%;
+    .nav-left,
+    .nav-right {
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
         gap: 10px;
+        width: 100%;
+    }
+
+    .site-title {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 5px;
     }
 
     .navbar a {
-        margin-right: 0;
-        display: block;
-        padding: 5px 0;
+        margin: 0;
+        padding: 5px 8px;
     }
 
     /* 2. Handle the Sidebar and Container */
     .container {
         flex-direction: column; /* Stack sidebar on top of main content */
+        padding: 5px;
     }
 
     .sidebar {
@@ -554,13 +564,17 @@
         border-bottom: 2px solid #7A1E1E;
     }
 
-    .sidebar.collapsed {
-        width: 100% !important;
-        height: auto;
+    .toggle-btn {
+        position: relative;   /* remove absolute */
+        top: auto;
+        right: auto;
+        display: block;
+        margin: 10px auto;
     }
 
-    .toggle-btn {
-        display: none; /* Hide toggle button on mobile to save space */
+    .sidebar.collapsed {
+        width: 100% !important;
+        height: 20px;
     }
 
     /* 3. Adjust Main Content Areas */
