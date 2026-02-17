@@ -589,6 +589,20 @@
         max-width: 100%;
     }
     
+     .interaction-wrapper {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .candle-section {
+        padding-top: 0;
+    }
+
+    .comments-container {
+        width: 100% !important;
+    }
+
+    
     .icon-info {
         flex-direction: row !important; /* Force horizontal even on mobile */
         justify-content: center;
