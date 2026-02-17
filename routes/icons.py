@@ -27,6 +27,34 @@ def icon_detail(request: Request, icon_id: int, db: Session = Depends(get_db)):
         "uploader_name": db.query(User).filter(User.id == icon.user_id).first().display_name    
     })
 
+# FastAPI JSON endpoint for bot
+@router.get("/api/icon/{icon_id}")
+def icon_api(icon_id: int, db: Session = Depends(get_db)):
+    icon = db.query(Icon).filter(Icon.id == icon_id).first()
+    if not icon:
+        return {"error": "Not found"}, 404
+    
+    return {
+        "title": icon.title,
+        "saints": [s.name for s in icon.saints],
+        "tradition": icon.tradition.name,
+        "century": icon.century,
+        "region": icon.region,
+        "iconographer": icon.iconographer or "Unknown",
+        "uploader": db.query(User).filter(User.id == icon.user_id).first().display_name,
+        "image_url": icon.image_url,
+        "description": icon.description
+    }
+
+
+
+@router.get("/icon/{icon_id}/image")
+def serve_icon_image(icon_id: int, db: Session = Depends(get_db)):
+    icon = db.query(Icon).filter(Icon.id == icon_id).first()
+    if not icon:
+        return JSONResponse({"error": "Icon not found"}, status_code=404)
+    
+    return RedirectResponse(url=icon.image_url)
 
 @router.post("/icon/{icon_id}/delete")
 def delete_icon(
